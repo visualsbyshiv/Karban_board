@@ -5,6 +5,7 @@ const http = require('http');
 const { Server } = require('socket.io');
 const connectDB = require('./config/db')
 const taskRoutes = require('./routes/taskRoutes');
+const { error } = require('console');
 
 
 dotenv.config();
@@ -13,7 +14,13 @@ connectDB();
 const app = express();
 
 app.use(cors({
-    origin:["https://frontend-eight-puce-scxx30lvdr.vercel.app", "http://localhost:5173"],
+   origin: function(origin,callback){
+    if(!origin|| allowedOrigins.includes(origin) || origin.endsWith(".vercel.app")){
+        callback(null,true);
+    }else{
+        callback(new error("not allowed by corsa"));
+    }
+   },
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials:true
 }));
@@ -24,9 +31,9 @@ const server = http.createServer(app);
 const io = new Server(server, {
 
     cors: {
-        origin: "*",
+        origin: true,
         methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
-        allowedHeaders: ["Content-Type", "Authorization"]
+        credentials:true
     }
 });
 app.use(express.json());
