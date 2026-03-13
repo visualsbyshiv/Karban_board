@@ -4,7 +4,6 @@ A fully functional, real-time collaborative Kanban Board built with the **MERN**
 
 ## 🌐 Live Demo
 - **Frontend:** [https://karban-board.vercel.app](https://karban-board.vercel.app)
-- **Backend:** [https://karban-board-backend.onrender.com](https://karban-board-backend.onrender.com)
 
 ## ✨ Features
 - **Real-time Sync:** Uses Socket.io to sync task movements across all users instantly without page refresh.
