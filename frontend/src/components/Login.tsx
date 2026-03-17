@@ -19,22 +19,24 @@ const LoginForm: React.FC = () => {
     }
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-4 bg-white p-4 shadow-md rounded">
-            <h2 className="text-xl font-bold">Login</h2>
-            <input type="email" placeholder="Enter your Email" className="w-full p-2 border"
+        <div style={{width:'30%', boxShadow:'-1px -1px 30px 1px rgba(157, 173, 201, 0.98)', border:'2px solid', borderRadius:'40px', height:'500px',margin:'150px 0px 0px 500px' }}>
+        <form onSubmit={handleSubmit}>
+            <h2 className="font-bold text-center" style={{textAlign:'center', fontSize:'40px'}}>Login</h2>
+            <input type="email" placeholder="Enter your Email"  style={{width:'80%', fontSize:'15px', paddingLeft:'10px' ,marginBottom:'30px', marginLeft:'30px'}}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             />
-            <input type="password" placeholder="Enter your Password" className="w-full p-2 border"
+            <input type="password" placeholder="Enter your Password"  style={{width:'80%', fontSize:'15px', paddingLeft:'10px' ,marginBottom:'30px', marginLeft:'30px'}}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
             />
-            < button type="submit" className="w-full bg-blue-500 text-white p-2 rounded" >Login</button>
-            <p className="text-center text-gray-600 mt-4">
+            < button type="submit" style={{fontSize:'15px',borderRadius:'30px', textAlign:'center', marginLeft:'30px', paddingLeft:'20px', paddingRight:'20px', paddingTop:'5px', paddingBottom:'5px'}} >Login</button>
+            <p  style={{textAlign:'center'}}>
                 Don't have an account?
-                <Link to="/register" className="text-blue-600 font-bold hover:underline ml-1">
+                <Link to="/register" >
                     Register here
                 </Link>
             </p>
         </form>
+        </div>
 
     );
 

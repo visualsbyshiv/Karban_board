@@ -24,33 +24,36 @@ const RegisterForm: React.FC = () => {
         }
     }
     return (
-        <form onSubmit={handleSubmit} className="space -y-4  bg-white p-6 shadow-md rounded-lg">
-            <h1 className="text-2xl font-bold text-center  text-gray-800"> Create Account</h1>
+         <div style={{width:'30%', boxShadow:'-1px -1px 30px 1px rgba(157, 173, 201, 0.98)', border:'2px solid', borderRadius:'40px', height:'500px',margin:'150px 0px 0px 500px' }}>
+      
+        <form onSubmit={handleSubmit} >
+            <h1 style={{textAlign:'center', fontSize:'40px'}}> Create Account</h1>
             <input type="text" placeholder="Enter Full anme"
-                className="w-full p-2 border-rounded outline-none focus:ring-2 focus:rign-green-400"
+                style={{width:'80%', fontSize:'15px', paddingLeft:'10px' ,marginBottom:'30px', marginLeft:'30px'}}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 required />
             <input type="email"
                 placeholder="Email Address"
-                className="w-full p-2 border rounded outline-none focus:ring-2 focus:ring-green-400"
+                style={{width:'80%', fontSize:'15px', paddingLeft:'10px' ,marginBottom:'30px', marginLeft:'30px'}}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 required
             />
             <input
                 type="password"
                 placeholder="Set Password"
-                className="w-full p-2 border rounded outline-none focus:ring-2 focus:ring-green-400"
+                style={{width:'80%', fontSize:'15px', paddingLeft:'10px' ,marginBottom:'30px', marginLeft:'30px'}}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 required
                 minLength={6}
             />
             <button
                 type="submit"
-                className="w-full bg-green-600 text-white p-2 rounded hover:bg-green-700 font-semibold transition"
+                style={{fontSize:'15px',borderRadius:'30px', textAlign:'center', marginLeft:'30px', paddingLeft:'20px', paddingRight:'20px', paddingTop:'5px', paddingBottom:'5px'}}
             >
                 Register
             </button>
         </form>
+        </div>
     )
 
 };

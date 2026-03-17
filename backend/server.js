@@ -39,7 +39,9 @@ const allowedOrigins = [
             origin: "https://karban-board.vercel.app",
             methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
             credentials:true
-        }
+        },
+        transports: ['websocket', 'polling'],
+        allowEIO3: true
     });
     app.use(express.json());
     app.set('socketio', io);
