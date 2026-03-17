@@ -1,6 +1,6 @@
 import axios from "axios";
 const api=axios.create({
-    baseURL:'https://karban-board.onrender.com/api',
+    baseURL:'https://karban-board-1.onrender.com/api',
     headers: {
         'Content-Type': 'application/json'
     }
@@ -12,5 +12,13 @@ api.interceptors.request.use((config) =>{
         config.headers['x-auth-token'] = token;
     }
     return config;
-});
+    
+},
+(error) => {
+      
+        return Promise.reject(error);
+    }
+);
+
+
 export default api;

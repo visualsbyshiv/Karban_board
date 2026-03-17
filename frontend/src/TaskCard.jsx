@@ -4,7 +4,7 @@ const handleDelete = async (id)=>{
 
     
 if (window.confirm('delete it')){
-    await axios.delete(`https://karban-board.onrender.com/api/tasks/${id}`);
+    await axios.delete(`https://karban-board-1.onrender.com/api/tasks/${id}`);
     setTasks((prev )=>prev.filter((t) => t._id !==id));
     alert('Task Deleted');
 }

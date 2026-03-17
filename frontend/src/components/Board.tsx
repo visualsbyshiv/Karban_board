@@ -4,7 +4,7 @@ import { io, Socket } from "socket.io-client";
 import { DragDropContext, Droppable, Draggable, type DropResult } from '@hello-pangea/dnd';
 import { useAuth } from "../Context/authContext";
 
-const BASE_URL = "https://karban-board.onrender.com";
+const BASE_URL = "https://karban-board-1.onrender.com";
 const socket: Socket = io(BASE_URL);
 
 interface Task {
@@ -29,11 +29,9 @@ const Board: React.FC = () => {
         const fetchTasks = async () => {
            
             try {
-                 const myToken=localStorage.getItem('token')
+                 const token=localStorage.getItem('token')
                const res = await api.get<Task[]>('/tasks', {
-                    headers: {
-                        'x-auth-token': myToken 
-                    }
+                  
                 });
 
                 setTasks(res.data);
@@ -53,7 +51,7 @@ const Board: React.FC = () => {
                 }
                 return [...prev, updatedTask];
             });
-        });
+        }); 
         return () => { socket.off('taskUpdated'); };
     }, []);
 
@@ -69,13 +67,11 @@ const Board: React.FC = () => {
                 priority: priority,
                 index: tasks.length
             }, {
-                headers: {
-                    'x-auth-token': token
-                }
-
+               
             });
-            setTasks([...tasks, res.data]);
+            setTasks((prev)=>[...prev, res.data]);
             setNewTask("")
+            console.log("Task add", res.data) ;
         } catch (error) {
             console.error('error adding task', error);
         }
@@ -84,8 +80,10 @@ const Board: React.FC = () => {
     const handleDelete = async (id: string) => {
         if (!window.confirm("Bhai, pakka delete karna hai?")) return;
         try {
-            
-            await api.delete(`/tasks/${id}`);
+            const token= localStorage.getItem('token');
+            await api.delete(`/tasks/${id}`),{
+               
+            }
             
             setTasks(tasks.filter(t => t._id !== id));
         } catch (error) {
@@ -107,13 +105,12 @@ const Board: React.FC = () => {
         }
 
         try {
-            const myToken = localStorage.getItem('token');
+            const token = localStorage.getItem('token');
             await api.patch(`/tasks/${draggableId}`, {
                 status: destination.droppableId,
                 index: destination.index
             },
 {
-                headers: { 'x-auth-token': myToken }
             });
         } catch (error) {
             console.error("Patch error", error);

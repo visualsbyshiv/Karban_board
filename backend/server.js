@@ -6,10 +6,11 @@ const { Server } = require('socket.io');
 const connectDB = require('./config/db')
 const taskRoutes = require('./routes/taskRoutes');
 const authRoutes = require('./routes/auth');
-const { callbackify } = require('util');
+
 
 
 dotenv.config();
+
 connectDB();
 
 const app = express();
@@ -43,11 +44,12 @@ const io = new Server(server, {
       origin:(origin,callback)=>{
         callback(null, true);
       },
-      methods:["GET","PODT"],
+      methods:["GET","POST"],
       credentials:true
     },
-    transports: ['websocket', 'polling'],
-    allowEIO3: true
+    transports: ['websocket'],
+  withCredentials: true
+   
 });
 
 
