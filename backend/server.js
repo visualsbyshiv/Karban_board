@@ -36,7 +36,7 @@ const allowedOrigins = [
     const io = new Server(server, {
 
         cors: {
-            origin: true,
+            origin: "https://karban-board.vercel.app",
             methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
             credentials:true
         }
