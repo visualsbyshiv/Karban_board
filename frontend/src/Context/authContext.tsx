@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState,  useContext } from 'react';
 import axios from 'axios';
 
 
@@ -15,7 +15,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [token, setToken] = useState<string | null>(()=>localStorage.getItem('token'));
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(()=>!!localStorage.getItem('token'));
-    const [loading, setLoading] = useState<boolean>(false);
+    const [loading,] = useState<boolean>(false);
 
     const login = (newToken: string) => {
         localStorage.setItem('token', newToken);

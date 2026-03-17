@@ -15,6 +15,7 @@
     "g": "^2.0.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-router-dom": "^7.13.1",
     "socket.io-client": "^4.8.3"
   },
   "devDependencies": {
@@ -34,6 +35,6 @@
   "overrides": {
     "vite": "^8.0.0-beta.13",
     "react": "$react",
-  "react-dom": "$react-dom"
+    "react-dom": "$react-dom"
   }
 }

@@ -17,7 +17,7 @@ interface Task {
 }
 
 const Board: React.FC = () => {
-    const { token, logout } = useAuth();
+    const {  logout } = useAuth();
     const [tasks, setTasks] = useState<Task[]>([]);
     const [newTask, setNewTask] = useState<string>("");
     const [priority, setPriority] = useState<'high' | 'medium' | 'low'>('medium');
@@ -84,7 +84,7 @@ const Board: React.FC = () => {
     const handleDelete = async (id: string) => {
         if (!window.confirm("Bhai, pakka delete karna hai?")) return;
         try {
-            const myToken = localStorage.getItem('token');  
+            
             await api.delete(`/tasks/${id}`);
             
             setTasks(tasks.filter(t => t._id !== id));
