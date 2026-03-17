@@ -1,21 +1,13 @@
 const Task =require('../modal/task');
-
 const express = require('express');
 const routes = express.Router();
-const { createTask, getTask, updateTask } = require('../controller/taskController');
-routes.post('/', createTask);
-routes.get('/', getTask);
-routes.patch('/:id',updateTask);
+const { createTask, getTask, updateTask,deleteTask } = require('../controller/taskController');
+const auth=require('../middleware/auth');
 
-routes.delete('/:id',async (req,res)=>{
-try{
+routes.get('/', auth, getTask);
+routes.post('/', auth, createTask);
+routes.patch('/:id', auth, updateTask);
+routes.delete('/:id', auth, deleteTask);
 
-    const deleteTask = await Task.findByIdAndDelete(req.params.id);
-    if(!deleteTask){
-    res.status().json({message:'Task not delete Deleted'});
-    }res.status(200).json({message:'Succesfully Delete'})
-}catch(error){
-    res.status(500).json(error);
-}
-})
+
 module.exports = routes;

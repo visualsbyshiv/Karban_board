@@ -32,6 +32,8 @@
     "vite": "^8.0.0-beta.13"
   },
   "overrides": {
-    "vite": "^8.0.0-beta.13"
+    "vite": "^8.0.0-beta.13",
+    "react": "$react",
+  "react-dom": "$react-dom"
   }
 }

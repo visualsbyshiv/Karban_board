@@ -5,7 +5,7 @@
     const { Server } = require('socket.io');
     const connectDB = require('./config/db')
     const taskRoutes = require('./routes/taskRoutes');
-    const { error } = require('console');
+    const authRoutes =require('./routes/auth')
 
 
     dotenv.config();
@@ -22,9 +22,10 @@ const allowedOrigins = [
         if(!origin|| allowedOrigins.includes(origin) || origin.endsWith(".vercel.app")){
             callback(null,true);
         }else{
-            callback(new error("not allowed by corsa"));
+            callback(new Error("not allowed by corsa"));
         }
     },
+
         methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
         credentials:true
     }));
@@ -42,7 +43,12 @@ const allowedOrigins = [
     });
     app.use(express.json());
     app.set('socketio', io);
+    app.use('/api/auth', authRoutes);
     app.use('/api/tasks', taskRoutes);
+    
+    app.get('/api/test', (req, res) => {
+    res.json({ message: " Server is live", });
+});
 
     io.on('connection', (socket) => {
         console.log(`USER CONNECTED ${socket.id}`);
@@ -50,8 +56,8 @@ const allowedOrigins = [
             socket.broadcast.emit('Board Update', data);
         });
 
-        socket.on('Disconnected', () => {
-            console.log('User Discomnected');
+        socket.on('disconnect', () => {
+            console.log('User Disconnected');
         });
     });
 
