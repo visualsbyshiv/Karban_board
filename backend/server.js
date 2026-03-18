@@ -10,6 +10,7 @@ const authRoutes = require('./routes/auth');
 
 
 dotenv.config();
+console.log("LOG: JWT_SECRET check ->", process.env.JWT_SECRET ? "MIL GAYA ✅" :"nahi mila");
 
 connectDB();
 
@@ -47,7 +48,7 @@ const io = new Server(server, {
       methods:["GET","POST"],
       credentials:true
     },
-    transports: ['websocket'],
+    transports: ['websocket','polling'],
   withCredentials: true
    
 });

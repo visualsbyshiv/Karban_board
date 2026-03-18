@@ -5,7 +5,11 @@ import { DragDropContext, Droppable, Draggable, type DropResult } from '@hello-p
 import { useAuth } from "../Context/authContext";
 
 const BASE_URL = "https://karban-board-1.onrender.com";
-const socket: Socket = io(BASE_URL);
+const socket: Socket = io(BASE_URL,{
+transports: ['websocket'],
+    upgrade: false
+});
+
 
 interface Task {
     _id: string;
@@ -29,7 +33,7 @@ const Board: React.FC = () => {
         const fetchTasks = async () => {
            
             try {
-                 const token=localStorage.getItem('token')
+               
                const res = await api.get<Task[]>('/tasks', {
                   
                 });
@@ -58,7 +62,7 @@ const Board: React.FC = () => {
     const handleAdd = async () => {
         if (!newTask) return;
         try {
-            const token = localStorage.getItem('token');
+          
 
             const res = await api.post<Task>('/tasks', {
                
@@ -80,10 +84,8 @@ const Board: React.FC = () => {
     const handleDelete = async (id: string) => {
         if (!window.confirm("Bhai, pakka delete karna hai?")) return;
         try {
-            const token= localStorage.getItem('token');
-            await api.delete(`/tasks/${id}`),{
-               
-            }
+           
+            await api.delete(`/tasks/${id}`)
             
             setTasks(tasks.filter(t => t._id !== id));
         } catch (error) {
@@ -105,7 +107,7 @@ const Board: React.FC = () => {
         }
 
         try {
-            const token = localStorage.getItem('token');
+            
             await api.patch(`/tasks/${draggableId}`, {
                 status: destination.droppableId,
                 index: destination.index

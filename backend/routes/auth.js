@@ -1,11 +1,13 @@
     const express=require('express');
     const bcrypt=require('bcryptjs');
     const router=express.Router();
-    const Jwt=require('jsonwebtoken');
+    const jwt=require('jsonwebtoken');
     const User=require('../modal/User');
+    const JWT_SECRET=require('/env')
 
     router.post('/register', async (req,res)=>{
         const {name,email,password}= req.body;
+        const secret= process.env.JWT_SECRET;
         try{
             let user=await User.findOne({email});
             if(user)return res.status(400).json({message:"user already exists"});
@@ -17,7 +19,7 @@
             await user.save();
 
             const payload= {user:{id: user.id}};
-            Jwt.sign(payload, process.env.JWT_SECRET,{expiresIn: '24h'},(err,token)=>{
+            jwt.sign(payload,secret,{expiresIn: '24h'},(err,token)=>{
                 if(err)throw err
                 res.json({token});
             });
@@ -36,7 +38,7 @@
                 const isMatch= await bcrypt.compare(password, user.password);
                 if(!isMatch) return res.status(400).json({message:'user not exits'});
                 const payload={user:{id: user.id}};
-                Jwt.sign(payload, process.env.JWT_SECRET,{expiresIn:'24h'},(err, token)=>{
+                jwt.sign(payload, secret,{expiresIn:'24h'},(err, token)=>{
                     if(err) throw err
                     res.status(200).send({token});
 
