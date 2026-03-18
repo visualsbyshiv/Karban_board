@@ -91,7 +91,7 @@ const Board: React.FC = () => {
 
 
                 });
-            setTasks((prev) => [...prev, res.data]);
+           
             setNewTask("")
             console.log("Task add", res.data);
         } catch (error) {
