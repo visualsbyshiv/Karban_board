@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../utils/api";
 import { useNavigate } from 'react-router-dom';
 
 
@@ -12,7 +12,7 @@ const RegisterForm: React.FC = () => {
 
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost:8080/api/auth/register', formData);
+            const res = await api.post('/auth/register', formData);
             localStorage.setItem('token', res.data.token);
 
             alert('Ragistration Succes');

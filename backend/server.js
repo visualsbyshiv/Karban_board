@@ -1,6 +1,8 @@
+
+const dotenv = require('dotenv');
+dotenv.config();
 const express = require('express');
 const cors = require('cors');
-const dotenv = require('dotenv');
 const http = require('http');
 const { Server } = require('socket.io');
 const connectDB = require('./config/db')
@@ -9,7 +11,7 @@ const authRoutes = require('./routes/auth');
 
 
 
-dotenv.config();
+
 console.log("LOG: JWT_SECRET check ->", process.env.JWT_SECRET ? "MIL GAYA ✅" :"nahi mila");
 
 connectDB();
@@ -31,7 +33,8 @@ app.use(cors({
     },
 
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-    credentials: true
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'x-auth-token', 'Authorization']
 }));
 
 app.use(express.json());

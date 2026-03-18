@@ -1,6 +1,5 @@
-import React, { createContext, useState,  useContext } from 'react';
-import axios from 'axios';
-
+import React, { createContext, useState, useContext, useEffect} from 'react';
+import api from '../utils/api';
 
 interface AuthContextType {
     token: string | null;
@@ -13,23 +12,32 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [token, setToken] = useState<string | null>(()=>localStorage.getItem('token'));
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(()=>!!localStorage.getItem('token'));
+    const [token, setToken] = useState<string | null>(() => localStorage.getItem('token'));
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => !!localStorage.getItem('token'));
     const [loading,] = useState<boolean>(false);
+
+    useEffect(() => {
+        const storedToken = localStorage.getItem('token');
+        if (storedToken) {
+            setToken(storedToken);
+        setIsAuthenticated(true);
+            api.defaults.headers.common['x-auth-token'] = storedToken;
+        }
+    }, []);
 
     const login = (newToken: string) => {
         localStorage.setItem('token', newToken);
         setToken(newToken);
         setIsAuthenticated(true);
-        axios.defaults.headers.common['x-auth-token']=newToken
+        api.defaults.headers.common['x-auth-token'] = newToken
     };
 
-   
+
     const logout = () => {
         localStorage.removeItem('token');
         setToken(null);
         setIsAuthenticated(false);
-        delete axios.defaults.headers.common['x-auth-token'];
+        delete api.defaults.headers.common['x-auth-token'];
     };
 
     return (

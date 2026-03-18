@@ -3,11 +3,11 @@
     const router=express.Router();
     const jwt=require('jsonwebtoken');
     const User=require('../modal/User');
-    const JWT_SECRET=require('/env')
-
+    
+ const secret= process.env.JWT_SECRET || 'ansh49shiv';
     router.post('/register', async (req,res)=>{
         const {name,email,password}= req.body;
-        const secret= process.env.JWT_SECRET;
+       
         try{
             let user=await User.findOne({email});
             if(user)return res.status(400).json({message:"user already exists"});
@@ -44,7 +44,8 @@
 
                 });
             }catch(err){
-                res.status(500).json('server err');
+               console.error("🚨 Login Me Panga:", err.message); 
+    res.status(500).json({ message: 'Server error', error: err.message });
             }
 
     

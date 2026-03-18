@@ -5,8 +5,8 @@ import { DragDropContext, Droppable, Draggable, type DropResult } from '@hello-p
 import { useAuth } from "../Context/authContext";
 
 const BASE_URL = "https://karban-board-1.onrender.com";
-const socket: Socket = io(BASE_URL,{
-transports: ['websocket'],
+const socket: Socket = io(BASE_URL, {
+    transports: ['websocket'],
     upgrade: false
 });
 
@@ -21,21 +21,32 @@ interface Task {
 }
 
 const Board: React.FC = () => {
-    const {  logout } = useAuth();
+    const { logout } = useAuth();
     const [tasks, setTasks] = useState<Task[]>([]);
     const [newTask, setNewTask] = useState<string>("");
     const [priority, setPriority] = useState<'high' | 'medium' | 'low'>('medium');
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
     const columns: Task['status'][] = ['todo', 'in-progress', 'done'];
+    const { token, loading: authLoading } = useAuth();
 
     useEffect(() => {
+        
         const fetchTasks = async () => {
-           
+
             try {
-               
-               const res = await api.get<Task[]>('/tasks', {
-                  
+                const currentToken = token || localStorage.getItem('token');
+
+                if (!currentToken) {
+                    console.error("No authentication token found. Please log in.");
+                    setLoading(false);
+                    return;
+                }
+                const res = await api.get('/tasks', {
+                    headers: {
+                        'x-auth-token': currentToken
+                    }
+
                 });
 
                 setTasks(res.data);
@@ -45,7 +56,11 @@ const Board: React.FC = () => {
                 setLoading(false);
             }
         };
+        if (!authLoading) {
         fetchTasks();
+    }
+      
+      
 
         socket.on('taskUpdated', (updatedTask: Task) => {
             setTasks((prev) => {
@@ -55,27 +70,30 @@ const Board: React.FC = () => {
                 }
                 return [...prev, updatedTask];
             });
-        }); 
+        });
         return () => { socket.off('taskUpdated'); };
-    }, []);
+    }, [token, authLoading]);
 
     const handleAdd = async () => {
         if (!newTask) return;
         try {
-          
 
+            const token = localStorage.getItem('token')
             const res = await api.post<Task>('/tasks', {
-               
+
                 title: newTask,
                 status: 'todo',
                 priority: priority,
                 index: tasks.length
-            }, {
-               
-            });
-            setTasks((prev)=>[...prev, res.data]);
+            },
+                {
+                    headers: { 'x-auth-token': token }
+
+
+                });
+            setTasks((prev) => [...prev, res.data]);
             setNewTask("")
-            console.log("Task add", res.data) ;
+            console.log("Task add", res.data);
         } catch (error) {
             console.error('error adding task', error);
         }
@@ -84,9 +102,11 @@ const Board: React.FC = () => {
     const handleDelete = async (id: string) => {
         if (!window.confirm("Bhai, pakka delete karna hai?")) return;
         try {
-           
-            await api.delete(`/tasks/${id}`)
-            
+            const token = localStorage.getItem('token'); { }
+            await api.delete(`/tasks/${id}`, {
+                headers: { 'x-auth-token': token }
+            })
+
             setTasks(tasks.filter(t => t._id !== id));
         } catch (error) {
             console.error("Delete Error", error);
@@ -107,13 +127,15 @@ const Board: React.FC = () => {
         }
 
         try {
-            
+            const token = localStorage.getItem('token');
             await api.patch(`/tasks/${draggableId}`, {
                 status: destination.droppableId,
                 index: destination.index
             },
-{
-            });
+
+                {
+                    headers: { 'x-auth-token': token }
+                });
         } catch (error) {
             console.error("Patch error", error);
         }
@@ -130,7 +152,7 @@ const Board: React.FC = () => {
     return (
         <div style={{ padding: '40px', minHeight: '100vh', backgroundColor: '#1a1a1a', color: 'wheat' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h2 style={{ fontSize: '38px', marginLeft:'520px'}}>Shiv Kanban Board</h2>
+                <h2 style={{ fontSize: '38px', marginLeft: '520px' }}>Shiv Kanban Board</h2>
                 <button onClick={logout} style={{ padding: '8px 16px', backgroundColor: '#ff4444', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
                     Logout
                 </button>
